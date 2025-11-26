@@ -1,0 +1,56 @@
+app-id: com.github.tx2z.XtoMarkdown
+runtime: org.kde.Platform
+runtime-version: '6.7'
+sdk: org.kde.Sdk
+command: xtomarkdown
+
+finish-args:
+  # X11 + XShm access (for Qt)
+  - --share=ipc
+  - --socket=fallback-x11
+  # Wayland access
+  - --socket=wayland
+  # OpenGL access (for Qt Quick)
+  - --device=dri
+  # File system access for converting documents
+  - --filesystem=home
+  # For file dialogs
+  - --talk-name=org.freedesktop.FileManager1
+
+modules:
+  # Pandoc - standalone binary (pypandoc-binary may not work in sandbox)
+  - name: pandoc
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 bin/pandoc /app/bin/pandoc
+    sources:
+      - type: archive
+        url: https://github.com/jgm/pandoc/releases/download/3.6.4/pandoc-3.6.4-linux-amd64.tar.gz
+        sha256: 5def6e1ff535e397becce292ee97767a947306150b9fb1488003b67ac3417c5e
+        # Verify: curl -sL URL | sha256sum
+
+  # Python dependencies via pip
+  - name: python-deps
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-build-isolation --prefix=/app PySide6==6.7.0
+      - pip3 install --no-build-isolation --prefix=/app platformdirs
+      - pip3 install --no-build-isolation --prefix=/app pypandoc
+      - pip3 install --no-build-isolation --prefix=/app "markitdown[all]"
+    sources: []
+
+  # XtoMarkdown application
+  - name: xtomarkdown
+    buildsystem: simple
+    build-commands:
+      # Install the application
+      - pip3 install --no-build-isolation --no-deps --prefix=/app .
+      # Install desktop file
+      - install -Dm644 packaging/linux/com.github.tx2z.XtoMarkdown.desktop /app/share/applications/com.github.tx2z.XtoMarkdown.desktop
+      # Install metainfo
+      - install -Dm644 packaging/linux/com.github.tx2z.XtoMarkdown.metainfo.xml /app/share/metainfo/com.github.tx2z.XtoMarkdown.metainfo.xml
+      # Install icons at multiple sizes
+      - install -Dm644 src/xtomarkdown/gui/resources/icons/app-icon.png /app/share/icons/hicolor/512x512/apps/com.github.tx2z.XtoMarkdown.png
+    sources:
+      - type: dir
+        path: ../../

@@ -1,0 +1,55 @@
+/* XtoMarkdown Application Stylesheet */
+/* Minimal styling - let native platform styles handle most widgets */
+
+/* Only style custom components that don't have native equivalents */
+
+/* Drop zone - custom widget */
+#DropZone {
+    border: 2px dashed palette(mid);
+    border-radius: 12px;
+    background-color: palette(base);
+    min-height: 140px;
+}
+
+#DropZone:hover {
+    border-color: palette(highlight);
+    background-color: palette(alternateBase);
+}
+
+/* File item cards - custom styling for list items */
+QFrame#fileItem {
+    background-color: palette(base);
+    border: 1px solid palette(mid);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+QFrame#fileItem:hover {
+    background-color: palette(alternateBase);
+}
+
+/* Flat icon buttons (remove button) */
+QPushButton#removeBtn {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+QPushButton#removeBtn:hover {
+    background-color: palette(alternateBase);
+}
+
+/* Progress bar - thin modern style */
+QProgressBar {
+    border: none;
+    border-radius: 3px;
+    background-color: palette(midlight);
+    text-align: center;
+    max-height: 6px;
+}
+
+QProgressBar::chunk {
+    background-color: palette(highlight);
+    border-radius: 3px;
+}

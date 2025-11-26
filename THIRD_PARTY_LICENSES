@@ -1,0 +1,56 @@
+# Third-Party Licenses
+
+XtoMarkdown uses the following open source software:
+
+## Pandoc (GPL v2+)
+
+Pandoc is a universal document converter.
+
+- Website: https://pandoc.org/
+- Source Code: https://github.com/jgm/pandoc
+- License: GNU General Public License v2 or later
+
+Pandoc is called as a separate subprocess and is not linked into this application.
+Full license text available in LICENSES/GPL-2.0.txt
+
+## pypandoc (MIT)
+
+Python wrapper for Pandoc.
+
+- Source Code: https://github.com/JessicaTegner/pypandoc
+- License: MIT License
+
+Full license text available in LICENSES/MIT-pypandoc.txt
+
+## MarkItDown (MIT)
+
+Microsoft's library for converting documents to Markdown.
+
+- Source Code: https://github.com/microsoft/markitdown
+- License: MIT License
+- Copyright (c) Microsoft Corporation
+
+Full license text available in LICENSES/MIT-markitdown.txt
+
+## PySide6 (LGPL v3)
+
+Qt for Python - Official Python bindings for Qt.
+
+- Website: https://www.qt.io/qt-for-python
+- Source Code: https://code.qt.io/cgit/pyside/pyside-setup.git/
+- License: GNU Lesser General Public License v3
+
+Full license text available in LICENSES/LGPL-3.0.txt
+
+## platformdirs (MIT)
+
+Cross-platform directories for application data.
+
+- Source Code: https://github.com/platformdirs/platformdirs
+- License: MIT License
+
+Full license text available in LICENSES/MIT-platformdirs.txt
+
+---
+
+Full license texts for all dependencies are available in the LICENSES/ directory.

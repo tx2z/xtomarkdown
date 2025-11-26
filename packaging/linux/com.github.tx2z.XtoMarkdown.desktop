@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=XtoMarkdown
+Comment=Convert documents to Markdown
+GenericName=Document Converter
+Exec=xtomarkdown %F
+Icon=com.github.tx2z.XtoMarkdown
+Terminal=false
+Type=Application
+Categories=Utility;Office;TextTools;
+Keywords=markdown;convert;docx;pdf;pptx;document;
+StartupWMClass=xtomarkdown
+StartupNotify=true
+MimeType=application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/pdf;application/vnd.openxmlformats-officedocument.presentationml.presentation;text/html;application/rtf;

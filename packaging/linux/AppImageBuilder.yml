@@ -1,0 +1,83 @@
+version: 1
+script:
+  - rm -rf AppDir || true
+  - mkdir -p AppDir/usr/bin AppDir/usr/lib/python3/dist-packages AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/512x512/apps AppDir/usr/share/metainfo
+
+  # Create virtual environment and install dependencies
+  - python3 -m venv build-venv
+  - ./build-venv/bin/pip install --upgrade pip
+  - ./build-venv/bin/pip install ../../.[dev]
+
+  # Copy Python packages to AppDir
+  - cp -r build-venv/lib/python*/site-packages/* AppDir/usr/lib/python3/dist-packages/
+
+  # Create launcher script
+  - |
+    cat > AppDir/usr/bin/xtomarkdown << 'EOF'
+    #!/bin/bash
+    HERE="$(dirname "$(readlink -f "${0}")")"
+    export PYTHONPATH="${HERE}/../lib/python3/dist-packages:${PYTHONPATH}"
+    export QT_PLUGIN_PATH="${HERE}/../lib/python3/dist-packages/PySide6/Qt/plugins"
+    export QML2_IMPORT_PATH="${HERE}/../lib/python3/dist-packages/PySide6/Qt/qml"
+    exec python3 -m xtomarkdown "$@"
+    EOF
+  - chmod +x AppDir/usr/bin/xtomarkdown
+
+  # Copy desktop file, icon, and metainfo
+  - cp com.github.tx2z.XtoMarkdown.desktop AppDir/usr/share/applications/
+  - cp ../../src/xtomarkdown/gui/resources/icons/app-icon.png AppDir/usr/share/icons/hicolor/512x512/apps/com.github.tx2z.XtoMarkdown.png
+  - cp com.github.tx2z.XtoMarkdown.metainfo.xml AppDir/usr/share/metainfo/
+
+  # Create AppDir symlinks
+  - ln -sf usr/share/applications/com.github.tx2z.XtoMarkdown.desktop AppDir/
+  - ln -sf usr/share/icons/hicolor/512x512/apps/com.github.tx2z.XtoMarkdown.png AppDir/
+  - ln -sf usr/bin/xtomarkdown AppDir/AppRun
+
+AppDir:
+  path: ./AppDir
+  app_info:
+    id: com.github.tx2z.XtoMarkdown
+    name: XtoMarkdown
+    icon: com.github.tx2z.XtoMarkdown
+    version: 1.0.0
+    exec: usr/bin/xtomarkdown
+
+  apt:
+    arch: amd64
+    sources:
+      - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ jammy main universe'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
+    include:
+      - python3
+      - python3-pip
+      - libxcb-cursor0
+      - libxkbcommon0
+      - libegl1
+      - libgl1
+      - libglib2.0-0
+      - libfontconfig1
+      - libfreetype6
+      - libx11-6
+      - libx11-xcb1
+      - libxcb1
+      - libxcb-glx0
+      - libxcb-keysyms1
+      - libxcb-image0
+      - libxcb-shm0
+      - libxcb-icccm4
+      - libxcb-sync1
+      - libxcb-xfixes0
+      - libxcb-shape0
+      - libxcb-randr0
+      - libxcb-render-util0
+      - libxcb-xinerama0
+      - libxcb-xkb1
+      - libdbus-1-3
+
+  runtime:
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+
+AppImage:
+  arch: x86_64
+  update-information: guess
