@@ -64,7 +64,8 @@ class DocumentConverter:
             return ConversionResult(success=False, error=f"No available engine for .{ext} files")
 
         # Perform conversion
-        return engine.convert(input_path, output_path)
+        result: ConversionResult = engine.convert(input_path, output_path)
+        return result
 
     def _select_engine(self, ext: str, forced_engine: str | None = None):
         """

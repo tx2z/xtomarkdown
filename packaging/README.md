@@ -13,7 +13,7 @@ sudo apt install flatpak-builder  # Debian/Ubuntu
 sudo dnf install flatpak-builder  # Fedora
 
 # Install required runtime
-flatpak install flathub org.kde.Platform//6.7 org.kde.Sdk//6.7
+flatpak install flathub org.kde.Platform//6.8 org.kde.Sdk//6.8
 ```
 
 Build:

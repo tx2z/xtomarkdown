@@ -18,6 +18,7 @@ def main():
     )
 
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")  # Consistent look across all platforms
     app.setApplicationName("XtoMarkdown")
     app.setOrganizationName("xtomarkdown")
     app.setApplicationVersion("1.0.0")

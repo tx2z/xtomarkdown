@@ -230,12 +230,17 @@ class PreferencesDialog(QDialog):
             return
 
         for row in selected_rows:
-            ext = self.engine_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+            ext_item = self.engine_table.item(row, 0)
+            if ext_item is None:
+                continue
+            ext = ext_item.data(Qt.ItemDataRole.UserRole)
             combo = self._engine_combos.get(ext)
             if combo:
                 combo.setCurrentIndex(0)  # Auto
-                self.engine_table.item(row, 2).setText("Default")
-                self.engine_table.item(row, 2).setForeground(Qt.GlobalColor.black)
+                status_item = self.engine_table.item(row, 2)
+                if status_item is not None:
+                    status_item.setText("Default")
+                    status_item.setForeground(Qt.GlobalColor.black)
 
     def _reset_all(self):
         """Reset all engines to defaults."""
@@ -249,8 +254,10 @@ class PreferencesDialog(QDialog):
             for combo in self._engine_combos.values():
                 combo.setCurrentIndex(0)
             for row in range(self.engine_table.rowCount()):
-                self.engine_table.item(row, 2).setText("Default")
-                self.engine_table.item(row, 2).setForeground(Qt.GlobalColor.black)
+                status_item = self.engine_table.item(row, 2)
+                if status_item is not None:
+                    status_item.setText("Default")
+                    status_item.setForeground(Qt.GlobalColor.black)
 
     def _save_and_close(self):
         """Save settings and close dialog."""

@@ -296,8 +296,6 @@ class DropZone(QWidget):
 
         from ..config.defaults import FILE_FILTER
 
-        files, _ = QFileDialog.getOpenFileNames(
-            self, "Select Files to Convert", "", FILE_FILTER
-        )
+        files, _ = QFileDialog.getOpenFileNames(self, "Select Files to Convert", "", FILE_FILTER)
         if files:
             self.files_dropped.emit(files)

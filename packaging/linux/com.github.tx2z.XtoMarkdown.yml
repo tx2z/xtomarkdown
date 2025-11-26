@@ -1,8 +1,12 @@
 app-id: com.github.tx2z.XtoMarkdown
 runtime: org.kde.Platform
-runtime-version: '6.7'
+runtime-version: "6.8"
 sdk: org.kde.Sdk
 command: xtomarkdown
+
+build-options:
+  build-args:
+    - --share=network
 
 finish-args:
   # X11 + XShm access (for Qt)
@@ -33,6 +37,8 @@ modules:
   - name: python-deps
     buildsystem: simple
     build-commands:
+      - pip3 install --no-build-isolation --prefix=/app hatchling
+      - pip3 install --no-build-isolation --prefix=/app Pillow
       - pip3 install --no-build-isolation --prefix=/app PySide6==6.7.0
       - pip3 install --no-build-isolation --prefix=/app platformdirs
       - pip3 install --no-build-isolation --prefix=/app pypandoc
@@ -49,8 +55,22 @@ modules:
       - install -Dm644 packaging/linux/com.github.tx2z.XtoMarkdown.desktop /app/share/applications/com.github.tx2z.XtoMarkdown.desktop
       # Install metainfo
       - install -Dm644 packaging/linux/com.github.tx2z.XtoMarkdown.metainfo.xml /app/share/metainfo/com.github.tx2z.XtoMarkdown.metainfo.xml
-      # Install icons at multiple sizes
-      - install -Dm644 src/xtomarkdown/gui/resources/icons/app-icon.png /app/share/icons/hicolor/512x512/apps/com.github.tx2z.XtoMarkdown.png
+      # Install icons at multiple sizes (resize from 2048x2048 source)
+      - |
+        python3 << 'EOF'
+        from PIL import Image
+        import os
+        os.makedirs('icons_out', exist_ok=True)
+        img = Image.open('src/xtomarkdown/gui/resources/icons/app-icon.png')
+        for size in [512, 256, 128, 64, 48]:
+            resized = img.resize((size, size), Image.LANCZOS)
+            resized.save(f'icons_out/icon-{size}.png')
+        EOF
+      - install -Dm644 icons_out/icon-512.png /app/share/icons/hicolor/512x512/apps/com.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-256.png /app/share/icons/hicolor/256x256/apps/com.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-128.png /app/share/icons/hicolor/128x128/apps/com.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-64.png /app/share/icons/hicolor/64x64/apps/com.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-48.png /app/share/icons/hicolor/48x48/apps/com.github.tx2z.XtoMarkdown.png
     sources:
       - type: dir
         path: ../../
