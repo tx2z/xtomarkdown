@@ -9,7 +9,7 @@ set -e
 
 APP_NAME="XtoMarkdown"
 APP_ID="io.github.tx2z.XtoMarkdown"
-VERSION="1.0.1"
+VERSION="1.0.2"
 ARCH="x86_64"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -117,6 +117,7 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libegl1-mesa \
     libxkbcommon0 \
+    libxkbcommon-x11-0 \
     libdbus-1-3 \
     libxcb-cursor0 \
     libxcb-icccm4 \
@@ -133,7 +134,7 @@ DOCKERFILE
 set -e
 
 APP_NAME="XtoMarkdown"
-APP_ID="com.github.tx2z.XtoMarkdown"
+APP_ID="${APP_ID}"
 VERSION="${VERSION}"
 ARCH="x86_64"
 
@@ -182,6 +183,7 @@ pyinstaller --onedir --windowed \
     --add-data "\${PYSIDE6_PATH}/Qt/plugins/platformthemes:PySide6/Qt/plugins/platformthemes" \
     --add-data "\${MAGIKA_PATH}/models:magika/models" \
     --add-binary "\${PYPANDOC_PATH}/files/pandoc:pypandoc/files" \
+    --add-binary "/usr/lib/x86_64-linux-gnu/libxkbcommon-x11.so.0:." \
     --collect-data magika \
     --collect-data pypandoc \
     --hidden-import PySide6.QtCore \
@@ -296,6 +298,7 @@ build_locally() {
         --add-data "${PYSIDE6_PATH}/Qt/plugins/platformthemes:PySide6/Qt/plugins/platformthemes" \
         --add-data "${MAGIKA_PATH}/models:magika/models" \
         --add-binary "${PYPANDOC_PATH}/files/pandoc:pypandoc/files" \
+        --add-binary "/usr/lib/x86_64-linux-gnu/libxkbcommon-x11.so.0:." \
         --collect-data magika \
         --collect-data pypandoc \
         --hidden-import PySide6.QtCore \
