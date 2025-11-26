@@ -35,7 +35,7 @@ Based on [Flathub requirements](https://docs.flathub.org/docs/for-app-authors/re
 - [x] **Icon** - 2048x2048 PNG (resized during build to 512, 256, 128, 64, 48)
 
 ### MetaInfo Requirements
-- [ ] Valid XML that passes `appstreamcli validate` (will pass after screenshots are pushed to GitHub)
+- [x] Valid XML that passes `appstreamcli validate`
 - [x] Contains `<id>`, `<name>`, `<summary>`, `<description>`
 - [x] Contains `<metadata_license>` (CC0-1.0)
 - [x] Contains `<project_license>` (GPL-3.0-or-later)
@@ -53,9 +53,11 @@ Based on [Flathub requirements](https://docs.flathub.org/docs/for-app-authors/re
 - [x] Minimal permissions requested
 
 ### TODO Before Submission
-1. **Create screenshots** - Add `screenshots/main-window.png` to the repo and push
-2. **Create GitHub release** - Tag v1.0.0 and create release
-3. **Create Flathub-specific manifest** - Combine current manifest with `python-deps.yaml`
+1. ~~**Create screenshots**~~ - Done! 5 screenshots in `screenshots/`
+2. ~~**Create GitHub release**~~ - Done! Tag v1.0.0 created
+3. ~~**Create Flathub-specific manifest**~~ - Done! `com.github.tx2z.XtoMarkdown.flathub.yml`
+
+**Ready to submit to Flathub!**
 
 ## Prerequisites
 
