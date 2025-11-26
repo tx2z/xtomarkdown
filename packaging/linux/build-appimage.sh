@@ -9,7 +9,7 @@ set -e
 
 APP_NAME="XtoMarkdown"
 APP_ID="com.github.tx2z.XtoMarkdown"
-VERSION="1.0.0"
+VERSION="1.0.1"
 ARCH="x86_64"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -128,13 +128,13 @@ WORKDIR /build
 DOCKERFILE
 
     # Create build script for inside container
-    cat > "${BUILD_DIR}/docker-build.sh" << 'BUILDSCRIPT'
+    cat > "${BUILD_DIR}/docker-build.sh" << BUILDSCRIPT
 #!/bin/bash
 set -e
 
 APP_NAME="XtoMarkdown"
 APP_ID="com.github.tx2z.XtoMarkdown"
-VERSION="1.0.0"
+VERSION="${VERSION}"
 ARCH="x86_64"
 
 cd /build
@@ -154,24 +154,56 @@ pip install /app
 echo "Installing PyInstaller..."
 pip install pyinstaller
 
-# Build with PyInstaller
+# Find PySide6 location for Qt plugins
+PYSIDE6_PATH=\$(python3 -c "import PySide6; print(PySide6.__path__[0])")
+echo "PySide6 path: \$PYSIDE6_PATH"
+
+# Find magika location for model data
+MAGIKA_PATH=\$(python3 -c "import magika; print(magika.__path__[0])")
+echo "Magika path: \$MAGIKA_PATH"
+
+# Find pypandoc location for bundled pandoc binary
+PYPANDOC_PATH=\$(python3 -c "import pypandoc; import os; print(os.path.dirname(pypandoc.__file__))")
+echo "Pypandoc path: \$PYPANDOC_PATH"
+
+# Build with PyInstaller including Qt plugins, magika models, and pandoc
 echo "Building with PyInstaller..."
 pyinstaller --onedir --windowed \
     --name xtomarkdown \
     --add-data "/app/src/xtomarkdown/gui/resources:xtomarkdown/gui/resources" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/platforms:PySide6/Qt/plugins/platforms" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/wayland-shell-integration:PySide6/Qt/plugins/wayland-shell-integration" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/wayland-decoration-client:PySide6/Qt/plugins/wayland-decoration-client" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/wayland-graphics-integration-client:PySide6/Qt/plugins/wayland-graphics-integration-client" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/xcbglintegrations:PySide6/Qt/plugins/xcbglintegrations" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/egldeviceintegrations:PySide6/Qt/plugins/egldeviceintegrations" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/imageformats:PySide6/Qt/plugins/imageformats" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/iconengines:PySide6/Qt/plugins/iconengines" \
+    --add-data "\${PYSIDE6_PATH}/Qt/plugins/platformthemes:PySide6/Qt/plugins/platformthemes" \
+    --add-data "\${MAGIKA_PATH}/models:magika/models" \
+    --add-binary "\${PYPANDOC_PATH}/files/pandoc:pypandoc/files" \
+    --collect-data magika \
+    --collect-data pypandoc \
+    --hidden-import PySide6.QtCore \
+    --hidden-import PySide6.QtGui \
+    --hidden-import PySide6.QtWidgets \
+    --hidden-import magika \
+    --hidden-import pypandoc \
     /app/src/xtomarkdown/__main__.py
 
 # Copy PyInstaller output to AppDir
 cp -r dist/xtomarkdown/* AppDir/usr/bin/
 
 # Copy desktop file, icon, and metainfo
-cp /app/packaging/linux/${APP_ID}.desktop AppDir/usr/share/applications/
-cp /app/src/xtomarkdown/gui/resources/icons/app-icon.png "AppDir/usr/share/icons/hicolor/512x512/apps/${APP_ID}.png"
-cp /app/packaging/linux/${APP_ID}.metainfo.xml AppDir/usr/share/metainfo/
+cp /app/packaging/linux/\${APP_ID}.desktop AppDir/usr/share/applications/
+cp /app/src/xtomarkdown/gui/resources/icons/app-icon.png "AppDir/usr/share/icons/hicolor/512x512/apps/\${APP_ID}.png"
+cp /app/packaging/linux/\${APP_ID}.metainfo.xml AppDir/usr/share/metainfo/
+# Create appdata.xml symlink for AppStream compatibility
+ln -sf \${APP_ID}.metainfo.xml AppDir/usr/share/metainfo/\${APP_ID}.appdata.xml
 
 # Create AppDir root symlinks
-ln -sf usr/share/applications/${APP_ID}.desktop AppDir/
-ln -sf usr/share/icons/hicolor/512x512/apps/${APP_ID}.png AppDir/
+ln -sf usr/share/applications/\${APP_ID}.desktop AppDir/
+ln -sf usr/share/icons/hicolor/512x512/apps/\${APP_ID}.png AppDir/
 ln -sf usr/bin/xtomarkdown AppDir/AppRun
 
 # Download appimagetool
@@ -185,7 +217,7 @@ mv squashfs-root appimagetool
 
 # Build AppImage
 echo "Creating AppImage..."
-ARCH=x86_64 ./appimagetool/AppRun AppDir "${APP_NAME}-${VERSION}-${ARCH}.AppImage"
+ARCH=x86_64 ./appimagetool/AppRun AppDir "\${APP_NAME}-\${VERSION}-\${ARCH}.AppImage"
 
 echo ""
 echo "AppImage created successfully!"
@@ -198,9 +230,10 @@ BUILDSCRIPT
     echo "Building Docker image..."
     docker build -t xtomarkdown-appimage-builder "${BUILD_DIR}"
 
-    # Run build in container
+    # Run build in container as current user to avoid root-owned files
     echo "Running build in container..."
     docker run --rm \
+        --user "$(id -u):$(id -g)" \
         -v "${PROJECT_ROOT}:/app:ro" \
         -v "${BUILD_DIR}:/build" \
         xtomarkdown-appimage-builder \
@@ -235,11 +268,41 @@ build_locally() {
     pip install "${PROJECT_ROOT}"
     pip install pyinstaller
 
-    # Build with PyInstaller
+    # Find PySide6 location for Qt plugins
+    PYSIDE6_PATH=$(python3 -c "import PySide6; print(PySide6.__path__[0])")
+    echo "PySide6 path: $PYSIDE6_PATH"
+
+    # Find magika location for model data
+    MAGIKA_PATH=$(python3 -c "import magika; print(magika.__path__[0])")
+    echo "Magika path: $MAGIKA_PATH"
+
+    # Find pypandoc location for bundled pandoc binary
+    PYPANDOC_PATH=$(python3 -c "import pypandoc; import os; print(os.path.dirname(pypandoc.__file__))")
+    echo "Pypandoc path: $PYPANDOC_PATH"
+
+    # Build with PyInstaller including Qt plugins, magika models, and pandoc
     echo "Building with PyInstaller..."
     pyinstaller --onedir --windowed \
         --name xtomarkdown \
         --add-data "${PROJECT_ROOT}/src/xtomarkdown/gui/resources:xtomarkdown/gui/resources" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/platforms:PySide6/Qt/plugins/platforms" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/wayland-shell-integration:PySide6/Qt/plugins/wayland-shell-integration" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/wayland-decoration-client:PySide6/Qt/plugins/wayland-decoration-client" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/wayland-graphics-integration-client:PySide6/Qt/plugins/wayland-graphics-integration-client" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/xcbglintegrations:PySide6/Qt/plugins/xcbglintegrations" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/egldeviceintegrations:PySide6/Qt/plugins/egldeviceintegrations" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/imageformats:PySide6/Qt/plugins/imageformats" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/iconengines:PySide6/Qt/plugins/iconengines" \
+        --add-data "${PYSIDE6_PATH}/Qt/plugins/platformthemes:PySide6/Qt/plugins/platformthemes" \
+        --add-data "${MAGIKA_PATH}/models:magika/models" \
+        --add-binary "${PYPANDOC_PATH}/files/pandoc:pypandoc/files" \
+        --collect-data magika \
+        --collect-data pypandoc \
+        --hidden-import PySide6.QtCore \
+        --hidden-import PySide6.QtGui \
+        --hidden-import PySide6.QtWidgets \
+        --hidden-import magika \
+        --hidden-import pypandoc \
         "${PROJECT_ROOT}/src/xtomarkdown/__main__.py"
 
     # Copy PyInstaller output to AppDir
@@ -249,6 +312,8 @@ build_locally() {
     cp "${SCRIPT_DIR}/${APP_ID}.desktop" AppDir/usr/share/applications/
     cp "${PROJECT_ROOT}/src/xtomarkdown/gui/resources/icons/app-icon.png" "AppDir/usr/share/icons/hicolor/512x512/apps/${APP_ID}.png"
     cp "${SCRIPT_DIR}/${APP_ID}.metainfo.xml" AppDir/usr/share/metainfo/
+    # Create appdata.xml symlink for AppStream compatibility
+    ln -sf ${APP_ID}.metainfo.xml AppDir/usr/share/metainfo/${APP_ID}.appdata.xml
 
     # Create AppDir root symlinks
     ln -sf usr/share/applications/${APP_ID}.desktop AppDir/
