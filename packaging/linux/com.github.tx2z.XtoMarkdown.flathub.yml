@@ -48,23 +48,23 @@ modules:
         --prefix=${FLATPAK_DEST} "PySide6==6.7.0" --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/49/57/c68855a35ec12f139c62e3bb78e2b2ab15c3e83e75867ed0c379f840c078/PySide6-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: da34c3b31a6a0a67d3cb5b2a66add77bb9ecc2f8fef98da7cc87b5bd04399e25
+        url: https://files.pythonhosted.org/packages/fb/c6/20149db21d8daefb529e81623bb4abbf20bb46958cec5b43935ae1628c96/PySide6-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: 64d6b5751f8d04aedc5e8ea53ddc6613b392919056511a988b790fd3a00f7d01
         only-arches:
           - x86_64
       - type: file
-        url: https://files.pythonhosted.org/packages/5f/db/e7a4e7e9cf27ad9e72dd11c06a9fb5f8e2cb5a4f3b07db2faa18ad33eb6c/PySide6_Addons-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: 6c0a4b15e18fc9133d10f9df19c7cac30baa693f8f82c7b4ba8edf0da1d93d90
+        url: https://files.pythonhosted.org/packages/59/4f/7baa3b9081141242b161e80b5ae080f36b420d5cb779bb469fa5cb79a458/PySide6_Addons-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: 888df2a916f1d59984e2f351e7d5850da0a04103e39501eb7d6a9b150e7431e6
         only-arches:
           - x86_64
       - type: file
-        url: https://files.pythonhosted.org/packages/20/62/f1bd73ee5c8ee0c2ed99b1e0c145ed8df4ffa2d65b89e932a25da84ac06f/PySide6_Essentials-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: 65d3fdb88ecbcb27a439f21a0feeacd0fa7b6aeb65e78f0a52aaafb00e87e9ec
+        url: https://files.pythonhosted.org/packages/d8/f7/7a8a0c3a87fc9a898a521ae34aea5806f71f7bef1a0e032a6d954550fcea/PySide6_Essentials-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: e013238fe40596b804068e34ac173514943a41bf8e5fbb4edfc7c30b00431bd5
         only-arches:
           - x86_64
       - type: file
-        url: https://files.pythonhosted.org/packages/37/64/04a47c3a5b1fa80702b2f0a85cf0894c67e29c3f39c41c14e0ed1cc0d4a1/shiboken6-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: 07a72a902ed5a508a7bdc42c12a1e8ce4f07fb7b93f739b5a5a365ca66515e52
+        url: https://files.pythonhosted.org/packages/6a/05/a2f348685041495be25709f85ca30d9f79fdc4f3bcd4f8da8b980b1de071/shiboken6-6.7.0-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: 7887ba7ecfddb09ee9966325c1e229a17f3f444b0257b77cb7838792287d3e05
         only-arches:
           - x86_64
 
@@ -113,7 +113,7 @@ modules:
         url: https://files.pythonhosted.org/packages/49/f6/73c4aa003d1237ee9bea8a46f49dc38c45dfe95af4f0da7e60678d388011/trove_classifiers-2025.11.14.15-py3-none-any.whl
         sha256: d1dac259c1e908939862e3331177931c6df0a37af2c1a8debcc603d9115fcdd9
 
-  # Pillow
+  # Pillow (pre-built wheel to avoid build dependencies)
   - name: python3-Pillow
     buildsystem: simple
     build-commands:
@@ -121,8 +121,10 @@ modules:
         --prefix=${FLATPAK_DEST} "Pillow" --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/5a/b0/cace85a1b0c9775a9f8f5d5423c8261c858760e2466c79b2dd184638b056/pillow-12.0.0.tar.gz
-        sha256: 87d4f8125c9988bfbed67af47dd7a953e2fc7b0cc1e7800ec6d2080d490bb353
+        url: https://files.pythonhosted.org/packages/88/e1/9098d3ce341a8750b55b0e00c03f1630d6178f38ac191c81c97a3b047b44/pillow-12.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
+        sha256: 82240051c6ca513c616f7f9da06e871f61bfd7805f566275841af15015b8f98d
+        only-arches:
+          - x86_64
 
   # markitdown and all its dependencies
   - name: python3-markitdown
@@ -141,8 +143,8 @@ modules:
         url: https://files.pythonhosted.org/packages/70/7d/9bc192684cea499815ff478dfcdc13835ddf401365057044fb721ec6bddb/certifi-2025.11.12-py3-none-any.whl
         sha256: 97de8790030bbd5c2d96b7ec782fc2f7820ef8dba6db909ccf95449f2d062d4b
       - type: file
-        url: https://files.pythonhosted.org/packages/13/69/33ddede1939fdd074bce5434295f38fae7136463422fe4fd3e0e89b98062/charset_normalizer-3.4.4.tar.gz
-        sha256: 94537985111c35f28720e43603b8e7b43a6ecfb2ce1d3058bbe955b73404e21a
+        url: https://files.pythonhosted.org/packages/0a/4c/925909008ed5a988ccbb72dcc897407e5d6d3bd72410d69e051fc0c14647/charset_normalizer-3.4.4-py3-none-any.whl
+        sha256: 7a32c560861a02ff789ad905a2fe94e3f840803362c84fecf1851cb4cf3dc37f
       - type: file
         url: https://files.pythonhosted.org/packages/98/78/01c019cdb5d6498122777c1a43056ebb3ebfeef2076d9d026bfe15583b2b/click-8.3.1-py3-none-any.whl
         sha256: 981153a64e25f12d547d3426c367a4857371575ee7ad18df2a6183ab0545b2a6
@@ -162,11 +164,13 @@ modules:
         url: https://files.pythonhosted.org/packages/0e/61/66938bbb5fc52dbdf84594873d5b51fb1f7c7794e9c0f5bd885f30bc507b/idna-3.11-py3-none-any.whl
         sha256: 771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea
       - type: file
-        url: https://files.pythonhosted.org/packages/a3/f3/3d1dcdd7b9c41d589f5cff252d32ed91cdf86ba84391cfc81d9d8773571d/magika-0.6.3.tar.gz
-        sha256: 7cc52aa7359af861957043e2bf7265ed4741067251c104532765cd668c0c0cb1
+        url: https://files.pythonhosted.org/packages/c4/03/5ed859be502903a68b7b393b17ae0283bf34195cfcca79ce2dc25b9290e7/magika-0.6.3-py3-none-manylinux_2_28_x86_64.whl
+        sha256: 3d9661eedbdf445ac9567e97e7ceefb93545d77a6a32858139ea966b5806fb64
+        only-arches:
+          - x86_64
       - type: file
-        url: https://files.pythonhosted.org/packages/e5/39/9816bf5dc7ec074f25dcf63038e6e35d6b088ce76648cce1f306a9ed2f87/onnxruntime-1.21.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
-        sha256: 817922864689ed82585d788dc0d914e22719792bc25779e857d2c22bb96c7fa7
+        url: https://files.pythonhosted.org/packages/8b/08/eead6895ed83b56711ca6c0d31d82f109401b9937558b425509e497d6fb4/onnxruntime-1.21.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 9a04aafb802c1e5573ba4552f8babcb5021b041eb4cfa802c9b7644ca3510eca
         only-arches:
           - x86_64
       - type: file
@@ -176,11 +180,13 @@ modules:
         url: https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl
         sha256: a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c
       - type: file
-        url: https://files.pythonhosted.org/packages/76/65/21b3bc86aac7b8f2862db1e808f1ea22b028e30a225a34a5ede9bf8678f2/numpy-2.3.5.tar.gz
-        sha256: 784db1dcdab56bf0517743e746dfb0f885fc68d948aba86eeec2cba234bdf1c0
+        url: https://files.pythonhosted.org/packages/b6/23/2a1b231b8ff672b4c450dac27164a8b2ca7d9b7144f9c02d2396518352eb/numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+        sha256: 0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28
+        only-arches:
+          - x86_64
       - type: file
-        url: https://files.pythonhosted.org/packages/0a/03/a1440979a3f74f16cab3b75b0da1a1a7f922d56a8ddea96092391998edc0/protobuf-6.33.1.tar.gz
-        sha256: 97f65757e8d09870de6fd973aeddb92f85435607235d20b2dfed93405d00c85b
+        url: https://files.pythonhosted.org/packages/08/b4/46310463b4f6ceef310f8348786f3cff181cea671578e3d9743ba61a459e/protobuf-6.33.1-py3-none-any.whl
+        sha256: d595a9fd694fdeb061a62fbe10eb039cc1e444df81ec9bb70c7fc59ebcb1eafa
       - type: file
         url: https://files.pythonhosted.org/packages/14/1b/a298b06749107c305e1fe0f814c6c74aea7b2f1e10989cb30f544a1b3253/python_dotenv-1.2.1-py3-none-any.whl
         sha256: b81ee9561e9ca4004139c6cbba3a238c32b03e4894671e181b671e8cb8425d61
