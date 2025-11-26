@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.github.tx2z.XtoMarkdown</id>
+  <id>io.github.tx2z.XtoMarkdown</id>
   <name>XtoMarkdown</name>
   <summary>Convert documents to Markdown</summary>
   <metadata_license>CC0-1.0</metadata_license>
@@ -21,7 +21,7 @@
     </ul>
   </description>
 
-  <launchable type="desktop-id">com.github.tx2z.XtoMarkdown.desktop</launchable>
+  <launchable type="desktop-id">io.github.tx2z.XtoMarkdown.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
@@ -50,7 +50,7 @@
   <url type="bugtracker">https://github.com/tx2z/xtomarkdown/issues</url>
   <url type="vcs-browser">https://github.com/tx2z/xtomarkdown</url>
 
-  <developer id="com.github.tx2z">
+  <developer id="io.github.tx2z">
     <name>Jesús Pérez</name>
   </developer>
 

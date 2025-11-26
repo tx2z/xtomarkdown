@@ -8,7 +8,7 @@
 set -e
 
 APP_NAME="XtoMarkdown"
-APP_ID="com.github.tx2z.XtoMarkdown"
+APP_ID="io.github.tx2z.XtoMarkdown"
 VERSION="1.0.1"
 ARCH="x86_64"
 

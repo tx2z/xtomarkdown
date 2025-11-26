@@ -1,13 +1,13 @@
 # Flathub manifest for XtoMarkdown
 # This manifest is for Flathub submission - NO network access during build
-# For local development builds, use com.github.tx2z.XtoMarkdown.yml instead
+# For local development builds, use io.github.tx2z.XtoMarkdown.yml instead
 #
 # To submit to Flathub:
 # 1. Fork https://github.com/flathub/flathub
-# 2. Copy this file as com.github.tx2z.XtoMarkdown.yml
+# 2. Copy this file as io.github.tx2z.XtoMarkdown.yml
 # 3. Submit a pull request
 
-app-id: com.github.tx2z.XtoMarkdown
+app-id: io.github.tx2z.XtoMarkdown
 runtime: org.kde.Platform
 runtime-version: "6.8"
 sdk: org.kde.Sdk
@@ -21,9 +21,10 @@ finish-args:
   - --socket=wayland
   # OpenGL access (for Qt Quick)
   - --device=dri
-  # File system access for converting documents
-  - --filesystem=home
-  # For file dialogs
+  # File system access for converting documents (xdg-documents, xdg-download, and file chooser portal)
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  # For native file dialogs via portal
   - --talk-name=org.freedesktop.FileManager1
 
 modules:
@@ -216,9 +217,9 @@ modules:
       # Install the application
       - pip3 install --no-build-isolation --no-deps --prefix=/app .
       # Install desktop file
-      - install -Dm644 packaging/linux/com.github.tx2z.XtoMarkdown.desktop /app/share/applications/com.github.tx2z.XtoMarkdown.desktop
+      - install -Dm644 packaging/linux/io.github.tx2z.XtoMarkdown.desktop /app/share/applications/io.github.tx2z.XtoMarkdown.desktop
       # Install metainfo
-      - install -Dm644 packaging/linux/com.github.tx2z.XtoMarkdown.metainfo.xml /app/share/metainfo/com.github.tx2z.XtoMarkdown.metainfo.xml
+      - install -Dm644 packaging/linux/io.github.tx2z.XtoMarkdown.metainfo.xml /app/share/metainfo/io.github.tx2z.XtoMarkdown.metainfo.xml
       # Install icons at multiple sizes (resize from 2048x2048 source)
       - |
         python3 << 'EOF'
@@ -230,11 +231,11 @@ modules:
             resized = img.resize((size, size), Image.LANCZOS)
             resized.save(f'icons_out/icon-{size}.png')
         EOF
-      - install -Dm644 icons_out/icon-512.png /app/share/icons/hicolor/512x512/apps/com.github.tx2z.XtoMarkdown.png
-      - install -Dm644 icons_out/icon-256.png /app/share/icons/hicolor/256x256/apps/com.github.tx2z.XtoMarkdown.png
-      - install -Dm644 icons_out/icon-128.png /app/share/icons/hicolor/128x128/apps/com.github.tx2z.XtoMarkdown.png
-      - install -Dm644 icons_out/icon-64.png /app/share/icons/hicolor/64x64/apps/com.github.tx2z.XtoMarkdown.png
-      - install -Dm644 icons_out/icon-48.png /app/share/icons/hicolor/48x48/apps/com.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-512.png /app/share/icons/hicolor/512x512/apps/io.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-256.png /app/share/icons/hicolor/256x256/apps/io.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-128.png /app/share/icons/hicolor/128x128/apps/io.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-64.png /app/share/icons/hicolor/64x64/apps/io.github.tx2z.XtoMarkdown.png
+      - install -Dm644 icons_out/icon-48.png /app/share/icons/hicolor/48x48/apps/io.github.tx2z.XtoMarkdown.png
     sources:
       - type: archive
         url: https://github.com/tx2z/xtomarkdown/archive/refs/tags/v1.0.0.tar.gz
