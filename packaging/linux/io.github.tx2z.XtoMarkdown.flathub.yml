@@ -238,5 +238,5 @@ modules:
       - install -Dm644 icons_out/icon-48.png /app/share/icons/hicolor/48x48/apps/io.github.tx2z.XtoMarkdown.png
     sources:
       - type: archive
-        url: https://github.com/tx2z/xtomarkdown/archive/refs/tags/v1.0.0.tar.gz
-        sha256: c8e0d780588dd161580e4abd848c65241f2b095d779c66a274eafef060627269
+        url: https://github.com/tx2z/xtomarkdown/archive/refs/tags/v1.0.2.tar.gz
+        sha256: ff176adcc2b55512c5487da9f134a15a2a12b3cbf2e9bc16715a6c10d2ecba67
