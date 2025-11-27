@@ -47,6 +47,13 @@ class MarkItDownEngine(BaseEngine):
                 self._markitdown = markitdown
             except ImportError:
                 pass
+            except PermissionError:
+                # App Sandbox blocks access to /etc/apache2/mime.types
+                # which markitdown tries to read via mimetypes module
+                pass
+            except Exception:
+                # Catch any other initialization errors
+                pass
         return self._markitdown
 
     def _get_md_instance(self):

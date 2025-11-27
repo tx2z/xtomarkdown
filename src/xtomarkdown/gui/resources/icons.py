@@ -1,5 +1,6 @@
 """Icon loading utilities for the application."""
 
+import sys
 from pathlib import Path
 
 from PySide6.QtCore import QSize
@@ -7,8 +8,20 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QApplication
 
+
+def _get_icons_dir() -> Path:
+    """Get the icons directory, handling PyInstaller bundles."""
+    if getattr(sys, "frozen", False):
+        # Running in PyInstaller bundle
+        base_path = Path(sys._MEIPASS)  # type: ignore[attr-defined]
+        return base_path / "xtomarkdown" / "gui" / "resources" / "icons"
+    else:
+        # Running in normal Python environment
+        return Path(__file__).parent / "icons"
+
+
 # Path to icons directory
-ICONS_DIR = Path(__file__).parent / "icons"
+ICONS_DIR = _get_icons_dir()
 
 
 def get_icon(name: str, color: str | None = None) -> QIcon:

@@ -221,11 +221,17 @@ iconutil -c icns XtoMarkdown.iconset
 
 ## Updating Version Number
 
-When releasing a new version, update:
-1. `pyproject.toml` - `version = "X.Y.Z"`
-2. `packaging/macos/Info.plist` - `CFBundleShortVersionString` and increment `CFBundleVersion`
-3. `packaging/windows/AppxManifest.xml` - `Version` attribute (use format `X.Y.Z.0`)
-4. `packaging/linux/com.github.tx2z.XtoMarkdown.metainfo.xml` - Add new `<release>` entry
+**Single source of truth**: `pyproject.toml` → `version = "X.Y.Z"`
+
+Most version numbers are read automatically from `pyproject.toml`:
+- Python package version (`from xtomarkdown import __version__`)
+- macOS app version (build script reads from pyproject.toml and updates Info.plist)
+- Linux build scripts (AppImage, Flatpak)
+
+When releasing a new version:
+1. **Required**: Update `pyproject.toml` - `version = "X.Y.Z"`
+2. **Windows only**: Update `packaging/windows/AppxManifest.xml` - `Version` attribute (format `X.Y.Z.0`)
+3. **Optional**: Update `packaging/linux/io.github.tx2z.XtoMarkdown.metainfo.xml` - Add new `<release>` entry for release notes
 
 ## App IDs
 

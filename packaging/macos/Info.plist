@@ -7,7 +7,7 @@
     <key>CFBundleDisplayName</key>
     <string>XtoMarkdown</string>
     <key>CFBundleExecutable</key>
-    <string>xtomarkdown</string>
+    <string>XtoMarkdown</string>
     <key>CFBundleIconFile</key>
     <string>XtoMarkdown.icns</string>
     <key>CFBundleIdentifier</key>

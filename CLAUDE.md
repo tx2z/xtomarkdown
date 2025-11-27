@@ -118,3 +118,16 @@ pyinstaller --onefile --windowed src/xtomarkdown/app.py --name xtomarkdown
 2. Add display name to `FORMAT_DISPLAY_NAMES`
 3. Update `FILE_FILTER` string for file dialogs
 4. Ensure at least one engine supports it in `supported_formats`
+
+## Version Management
+
+**Single source of truth**: `pyproject.toml` → `version = "X.Y.Z"`
+
+The version is automatically propagated to:
+- **Python code**: `from xtomarkdown import __version__` (reads from `importlib.metadata`)
+- **Build scripts**: All build scripts (`build-macos.sh`, `build-appimage.sh`, `build-flatpak.sh`) read from `pyproject.toml`
+- **macOS Info.plist**: Updated automatically during build via `PlistBuddy`
+
+To release a new version:
+1. Update `version` in `pyproject.toml`
+2. Run the appropriate build script - version is read automatically

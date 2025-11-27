@@ -1,9 +1,31 @@
 """Pandoc conversion engine implementation."""
 
+import os
+import sys
 from pathlib import Path
 from typing import ClassVar
 
 from .base import BaseEngine, ConversionResult
+
+
+def _get_bundled_pandoc_path() -> str | None:
+    """Get the path to bundled pandoc binary in PyInstaller bundle."""
+    if getattr(sys, "frozen", False):
+        # Running in PyInstaller bundle
+        base_path = Path(sys._MEIPASS)  # type: ignore[attr-defined]
+
+        # Check multiple possible locations
+        # PyInstaller windowed apps on macOS put binaries in Frameworks
+        possible_paths = [
+            base_path / "pandoc",  # Standard location
+            base_path / ".." / "Frameworks" / "pandoc",  # macOS app bundle
+        ]
+
+        for pandoc_path in possible_paths:
+            pandoc_path = pandoc_path.resolve()
+            if pandoc_path.exists():
+                return str(pandoc_path)
+    return None
 
 
 class PandocEngine(BaseEngine):
@@ -31,6 +53,14 @@ class PandocEngine(BaseEngine):
     def __init__(self):
         self._pypandoc = None
         self._version: str | None = None
+        self._configure_bundled_pandoc()
+
+    def _configure_bundled_pandoc(self):
+        """Configure pypandoc to use bundled pandoc if available."""
+        bundled_path = _get_bundled_pandoc_path()
+        if bundled_path:
+            # Set environment variable that pypandoc checks
+            os.environ["PYPANDOC_PANDOC"] = bundled_path
 
     def _get_pypandoc(self):
         """Lazy load pypandoc module."""

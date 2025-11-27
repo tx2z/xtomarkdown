@@ -9,12 +9,18 @@ set -e
 
 APP_NAME="XtoMarkdown"
 APP_ID="io.github.tx2z.XtoMarkdown"
-VERSION="1.0.2"
 ARCH="x86_64"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 BUILD_DIR="${PROJECT_ROOT}/build/appimage"
+
+# Read version from pyproject.toml (single source of truth)
+VERSION=$(grep -E "^version\s*=" "${PROJECT_ROOT}/pyproject.toml" | sed 's/.*"\(.*\)".*/\1/')
+if [ -z "${VERSION}" ]; then
+    echo "ERROR: Could not read version from pyproject.toml"
+    exit 1
+fi
 
 # Check for --no-docker flag
 USE_DOCKER=true
